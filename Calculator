@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Download, Plus, Trash2, Upload, Copy, RefreshCw } from "lucide-react";
@@ -42,10 +44,12 @@ const STORAGE_KEY = "asc-proc-margin-v2";
 
 export default function App() {
   const [rows, setRows] = useState<ProcRow[]>(() => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) return JSON.parse(raw);
-    } catch {}
+    if (typeof window !== "undefined") {
+      try {
+        const raw = window.localStorage.getItem(STORAGE_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch {}
+    }
     return SAMPLE;
   });
 
