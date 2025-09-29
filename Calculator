@@ -157,7 +157,7 @@ export default function App() {
         d.margin,
       ].join(",");
     });
-    const csv = [header.join(","), ...lines, "Totals,,,,,, ," + [totals.costs, totals.margin, totals.marginPct, totals.margin].join(",")].join("\n");
+    const csv = [header.join(","), ...lines, "Totals,,,,,,,," + [totals.costs, totals.margin, totals.marginPct, totals.margin].join(",")].join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -195,7 +195,19 @@ export default function App() {
         MarginPct: d.marginPct,
       };
     });
-    sheetRows.push({ Procedure: "Totals", Payer: "", Reimbursement: totals.reimb, Implant: "", Anesthesia: "", FTE: "", Fixed: "", Soft: "", TotalCosts: totals.costs, Margin: totals.margin, MarginPct: totals.marginPct } as any);
+    sheetRows.push({
+      Procedure: "Totals",
+      Payer: "",
+      Reimbursement: totals.reimb,
+      Implant: "",
+      Anesthesia: "",
+      FTE: "",
+      Fixed: "",
+      Soft: "",
+      TotalCosts: totals.costs,
+      Margin: totals.margin,
+      MarginPct: totals.marginPct,
+    });
     const ws = XLSX.utils.json_to_sheet(sheetRows);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "ASC Margins");
@@ -245,7 +257,7 @@ export default function App() {
             <Button variant="secondary" onClick={exportJSON} className="gap-2"><Download size={16}/> Export JSON</Button>
             <Button variant="secondary" onClick={exportXLSX} className="gap-2"><Download size={16}/> Export Excel</Button>
             <Button variant="outline" onClick={resetSample} className="gap-2"><RefreshCw size={16}/> Reset Sample</Button>
-            <input ref={fileRef} type="file" accept="application/json" className="hidden" onChange={(e)=>{const f=e.target.files?.[0]; if(f) importJSON(f);}} />
+            <input ref={fileRef} type="file" accept="application/json,.json" className="hidden" onChange={(e)=>{const f=e.target.files?.[0]; if(f) importJSON(f);}} />
             <Button variant="outline" onClick={()=>fileRef.current?.click()} className="gap-2"><Upload size={16}/> Import JSON</Button>
           </div>
         </header>
